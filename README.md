@@ -53,6 +53,7 @@ int main(HINSTANCE hInstance, char *lpCmdLine, int nCmdShow) {
 
 		}
 	}
+	return 0;
 }
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
