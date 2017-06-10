@@ -1,5 +1,5 @@
 ## Visual Studio
-* Version             : 2017(v141)
+* Platform Toolset    : Visual Studio 2017(v141)
 * Windows SDK Version : 10.0.14393.0
 
 ## LibGen.bat
