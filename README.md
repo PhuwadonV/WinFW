@@ -2,6 +2,7 @@
 * Version             : Visual Studio Community 2017
 * Platform Toolset    : Visual Studio 2017(v141)
 * Windows SDK Version : 10.0.14393.0
+* Build               : Release (x86, x64)
 
 ## LibGen.bat
 Automatic create Library folder and copy files from project folder
