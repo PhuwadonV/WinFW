@@ -158,7 +158,7 @@ namespace WinFW {
 	class Ref_Impl : public virtual Ref {
 		unsigned long long m_refCount;
 
-		bool setRef(void **const ppRef) {
+		bool setInterface(void **const ppRef) {
 			if (ppRef != nullptr) {
 				incRef();
 				*ppRef = static_cast<Ref*>(this);
@@ -167,13 +167,13 @@ namespace WinFW {
 		}
 	protected:
 		virtual bool queryRefByCmpPtr(void **const ppRef, const char *id) {
-			if (id == Ref::GetRefName()) return setRef(ppRef);
-			return false;
+			if (id == Ref::GetRefName()) return setInterface(ppRef);
+			else return false;
 		}
 
 		virtual bool queryRefByCmpStr(void **const ppRef, const char *id) {
-			if (std::strcmp(id, Ref::GetRefName()) == 0) return setRef(ppRef);
-			return false;
+			if (std::strcmp(id, Ref::GetRefName()) == 0) return setInterface(ppRef);
+			else return false;
 		}
 	public:
 		virtual ~Ref_Impl() = default;
@@ -204,8 +204,8 @@ namespace WinFW {
 		}
 
 		bool queryRef(void **const ppRef, const char *id, bool b) {
-			if (b) queryRefByCmpPtr(ppRef, id);
-			return queryRefByCmpStr(ppRef, id);
+			if (b) return queryRefByCmpPtr(ppRef, id);
+			else return queryRefByCmpStr(ppRef, id);
 		}
 
 		const char* getRefName() {
@@ -214,7 +214,7 @@ namespace WinFW {
 	};
 
 	class Copyable_Impl : public virtual Copyable, public virtual Ref_Impl {
-		bool setRef(void **const ppRef) {
+		bool setInterface(void **const ppRef) {
 			if (ppRef != nullptr) {
 				incRef();
 				*ppRef = static_cast<Copyable*>(this);
@@ -223,13 +223,13 @@ namespace WinFW {
 		}
 	protected:
 		bool queryRefByCmpPtr(void **const ppRef, const char *id) {
-			if (id == Copyable::GetRefName()) return setRef(ppRef);
-			return Ref_Impl::queryRefByCmpPtr(ppRef, id);
+			if (id == Copyable::GetRefName()) return setInterface(ppRef);
+			else return Ref_Impl::queryRefByCmpPtr(ppRef, id);
 		}
 
 		bool queryRefByCmpStr(void **const ppRef, const char *id) {
-			if (std::strcmp(id, Copyable::GetRefName()) == 0) return setRef(ppRef);
-			return Ref_Impl::queryRefByCmpStr(ppRef, id);
+			if (std::strcmp(id, Copyable::GetRefName()) == 0) return setInterface(ppRef);
+			else return Ref_Impl::queryRefByCmpStr(ppRef, id);
 		}
 
 		virtual bool copyByCmpPtr(void **const ppRef, const char *id) {
@@ -251,8 +251,8 @@ namespace WinFW {
 		}
 
 		bool copy(void **const ppRef, const char *id, bool b) {
-			if (b) copyByCmpPtr(ppRef, id);
-			return copyByCmpStr(ppRef, id);
+			if (b) return copyByCmpPtr(ppRef, id);
+			else return copyByCmpStr(ppRef, id);
 		}
 	};
 
@@ -261,7 +261,7 @@ namespace WinFW {
 			char *m_str;
 			size_t m_count;
 
-			bool setRef(void **const ppRef) {
+			bool setInterface(void **const ppRef) {
 				if (ppRef != nullptr) {
 					incRef();
 					*ppRef = static_cast<StringHolder*>(this);
@@ -269,7 +269,7 @@ namespace WinFW {
 				return true;
 			}
 
-			bool copyRef(void **const ppRef) {
+			bool copyInterface(void **const ppRef) {
 				if (ppRef != nullptr) {
 					try {
 						size_t countBuff = m_count + 1;
@@ -292,23 +292,23 @@ namespace WinFW {
 			}
 		protected:
 			bool queryRefByCmpPtr(void **const ppRef, const char *id) {
-				if (id == StringHolder::GetRefName()) return setRef(ppRef);
-				return Copyable_Impl::queryRefByCmpPtr(ppRef, id);
+				if (id == StringHolder::GetRefName()) return setInterface(ppRef);
+				else return Copyable_Impl::queryRefByCmpPtr(ppRef, id);
 			}
 
 			bool queryRefByCmpStr(void **const ppRef, const char *id) {
-				if (std::strcmp(id, StringHolder::GetRefName()) == 0) return setRef(ppRef);
-				return Copyable_Impl::queryRefByCmpStr(ppRef, id);
+				if (std::strcmp(id, StringHolder::GetRefName()) == 0) return setInterface(ppRef);
+				else return Copyable_Impl::queryRefByCmpStr(ppRef, id);
 			}
 
 			bool copyByCmpPtr(void **const ppRef, const char *id) {
-				if (id == StringHolder::GetRefName()) return copyRef(ppRef);
-				return Copyable_Impl::copyByCmpPtr(ppRef, id);
+				if (id == StringHolder::GetRefName()) return copyInterface(ppRef);
+				else return Copyable_Impl::copyByCmpPtr(ppRef, id);
 			}
 
 			bool copyByCmpStr(void **const ppRef, const char *id) {
-				if (std::strcmp(id, StringHolder::GetRefName()) == 0) return copyRef(ppRef);
-				return Copyable_Impl::copyByCmpStr(ppRef, id);
+				if (std::strcmp(id, StringHolder::GetRefName()) == 0) return copyInterface(ppRef);
+				else return Copyable_Impl::copyByCmpStr(ppRef, id);
 			}
 		public:
 			~StringHolder_Impl() {
@@ -335,7 +335,7 @@ namespace WinFW {
 			wchar_t *m_str;
 			size_t m_count;
 
-			bool setRef(void **const ppRef) {
+			bool setInterface(void **const ppRef) {
 				if (ppRef != nullptr) {
 					incRef();
 					*ppRef = static_cast<WStringHolder*>(this);
@@ -343,7 +343,7 @@ namespace WinFW {
 				return true;
 			}
 
-			bool copyRef(void **const ppRef) {
+			bool copyInterface(void **const ppRef) {
 				if (ppRef != nullptr) {
 					try {
 						size_t countBuff = m_count + 1;
@@ -366,23 +366,23 @@ namespace WinFW {
 			}
 		protected:
 			bool queryRefByCmpPtr(void **const ppRef, const char *id) {
-				if (id == WStringHolder::GetRefName()) return setRef(ppRef);
-				return Copyable_Impl::queryRefByCmpPtr(ppRef, id);
+				if (id == WStringHolder::GetRefName()) return setInterface(ppRef);
+				else return Copyable_Impl::queryRefByCmpPtr(ppRef, id);
 			}
 
 			bool queryRefByCmpStr(void **const ppRef, const char *id) {
-				if (std::strcmp(id, WStringHolder::GetRefName()) == 0) return setRef(ppRef);
-				return Copyable_Impl::queryRefByCmpStr(ppRef, id);
+				if (std::strcmp(id, WStringHolder::GetRefName()) == 0) return setInterface(ppRef);
+				else return Copyable_Impl::queryRefByCmpStr(ppRef, id);
 			}
 
 			bool copyByCmpPtr(void **const ppRef, const char *id) {
-				if (id == WStringHolder::GetRefName()) return copyRef(ppRef);
-				return Copyable_Impl::copyByCmpPtr(ppRef, id);
+				if (id == WStringHolder::GetRefName()) return copyInterface(ppRef);
+				else return Copyable_Impl::copyByCmpPtr(ppRef, id);
 			}
 
 			bool copyByCmpStr(void **const ppRef, const char *id) {
-				if (std::strcmp(id, WStringHolder::GetRefName()) == 0) return copyRef(ppRef);
-				return Copyable_Impl::copyByCmpStr(ppRef, id);
+				if (std::strcmp(id, WStringHolder::GetRefName()) == 0) return copyInterface(ppRef);
+				else return Copyable_Impl::copyByCmpStr(ppRef, id);
 			}
 		public:
 			~WStringHolder_Impl() {
@@ -410,7 +410,7 @@ namespace WinFW {
 		class Exception_Impl : public virtual Exception, public virtual Ref_Impl {
 			Text::StringHolder *m_msg;
 
-			bool setRef(void **const ppRef) {
+			bool setInterface(void **const ppRef) {
 				if (ppRef != nullptr) {
 					incRef();
 					*ppRef = static_cast<Exception*>(this);
@@ -419,13 +419,13 @@ namespace WinFW {
 			}
 		protected:
 			bool queryRefByCmpPtr(void **const ppRef, const char *id) {
-				if (id == Exception::GetRefName()) return setRef(ppRef);
-				return Ref_Impl::queryRefByCmpPtr(ppRef, id);
+				if (id == Exception::GetRefName()) return setInterface(ppRef);
+				else return Ref_Impl::queryRefByCmpPtr(ppRef, id);
 			}
 
 			bool queryRefByCmpStr(void **const ppRef, const char *id) {
-				if (std::strcmp(id, Exception::GetRefName()) == 0) return setRef(ppRef);
-				return Ref_Impl::queryRefByCmpStr(ppRef, id);
+				if (std::strcmp(id, Exception::GetRefName()) == 0) return setInterface(ppRef);
+				else return Ref_Impl::queryRefByCmpStr(ppRef, id);
 			}
 		public:
 			~Exception_Impl() {
@@ -449,7 +449,7 @@ namespace WinFW {
 		};
 
 		class InvalidObjectException_Impl : public virtual InvalidObjectException, public virtual Exception_Impl {
-			bool setRef(void **const ppRef) {
+			bool setInterface(void **const ppRef) {
 				if (ppRef != nullptr) {
 					incRef();
 					*ppRef = static_cast<InvalidObjectException*>(this);
@@ -458,13 +458,13 @@ namespace WinFW {
 			}
 		protected:
 			bool queryRefByCmpPtr(void **const ppRef, const char *id) {
-				if (id == InvalidObjectException::GetRefName()) return setRef(ppRef);
-				return Exception_Impl::queryRefByCmpPtr(ppRef, id);
+				if (id == InvalidObjectException::GetRefName()) return setInterface(ppRef);
+				else return Exception_Impl::queryRefByCmpPtr(ppRef, id);
 			}
 
 			bool queryRefByCmpStr(void **const ppRef, const char *id) {
-				if (std::strcmp(id, InvalidObjectException::GetRefName()) == 0) return setRef(ppRef);
-				return Exception_Impl::queryRefByCmpStr(ppRef, id);
+				if (std::strcmp(id, InvalidObjectException::GetRefName()) == 0) return setInterface(ppRef);
+				else return Exception_Impl::queryRefByCmpStr(ppRef, id);
 			}
 		public:
 			InvalidObjectException_Impl(Text::StringHolder *msg) : Exception_Impl(msg) {
@@ -483,7 +483,7 @@ namespace WinFW {
 	class WinClassStyle_Impl : public virtual WinClassStyle, public virtual Copyable_Impl {
 		UINT m_value = 0;
 
-		bool setRef(void **const ppRef) {
+		bool setInterface(void **const ppRef) {
 			if (ppRef != nullptr) {
 				incRef();
 				*ppRef = static_cast<WinClassStyle*>(this);
@@ -491,7 +491,7 @@ namespace WinFW {
 			return true;
 		}
 
-		bool copyRef(void **const ppRef) {
+		bool copyInterface(void **const ppRef) {
 			if (ppRef != nullptr) {
 				try {
 					*ppRef = static_cast<WinClassStyle*>(new WinClassStyle_Impl(m_value));
@@ -504,25 +504,33 @@ namespace WinFW {
 		}
 	protected:
 		bool queryRefByCmpPtr(void **const ppRef, const char *id) {
-			if (id == WinClassStyle::GetRefName()) return setRef(ppRef);
-			return Copyable_Impl::queryRefByCmpPtr(ppRef, id);
+			if (id == WinClassStyle::GetRefName()) return setInterface(ppRef);
+			else if (id == WinClassStyle_Impl::GetRefName()) {
+				if (ppRef != nullptr) *ppRef = this;
+				return true;
+			}
+			else return Copyable_Impl::queryRefByCmpPtr(ppRef, id);
 		}
 
 		bool queryRefByCmpStr(void **const ppRef, const char *id) {
-			if (std::strcmp(id, WinClassStyle::GetRefName()) == 0) return setRef(ppRef);
-			return Copyable_Impl::queryRefByCmpStr(ppRef, id);
+			if (std::strcmp(id, WinClassStyle::GetRefName()) == 0) return setInterface(ppRef);
+			else return Copyable_Impl::queryRefByCmpStr(ppRef, id);
 		}
 
 		bool copyByCmpPtr(void **const ppRef, const char *id) {
-			if (id == WinClassStyle::GetRefName()) return copyRef(ppRef);
-			return Copyable_Impl::copyByCmpPtr(ppRef, id);
+			if (id == WinClassStyle::GetRefName()) return copyInterface(ppRef);
+			else return Copyable_Impl::copyByCmpPtr(ppRef, id);
 		}
 
 		bool copyByCmpStr(void **const ppRef, const char *id) {
-			if (std::strcmp(id, WinClassStyle::GetRefName()) == 0) return copyRef(ppRef);
-			return Copyable_Impl::copyByCmpStr(ppRef, id);
+			if (std::strcmp(id, WinClassStyle::GetRefName()) == 0) return copyInterface(ppRef);
+			else return Copyable_Impl::copyByCmpStr(ppRef, id);
 		}
 	public:
+		static const char* GetRefName() {
+			return "WinFW::WinClassStyle_Impl";
+		}
+
 		WinClassStyle_Impl() : WinClassStyle_Impl(0) {
 		}
 
@@ -533,7 +541,7 @@ namespace WinFW {
 			return WinClassStyle::GetRefName();
 		}
 
-		UINT getValue() {
+		virtual UINT getValue() {
 			return m_value;
 		}
 
@@ -615,7 +623,7 @@ namespace WinFW {
 		Text::WStringHolder *m_lpszClassName;
 		WNDPROC m_lpfnWndProc;
 
-		bool setRef(void **const ppRef) {
+		bool setInterface(void **const ppRef) {
 			if (ppRef != nullptr) {
 				incRef();
 				*ppRef = static_cast<WinClassConfig*>(this);
@@ -623,7 +631,7 @@ namespace WinFW {
 			return true;
 		}
 
-		bool copyRef(void **const ppRef) {
+		bool copyInterface(void **const ppRef) {
 			if (ppRef != nullptr) {
 				try {
 					m_lpszClassName->incRef();
@@ -641,25 +649,33 @@ namespace WinFW {
 		}
 	protected:
 		bool queryRefByCmpPtr(void **const ppRef, const char *id) {
-			if (id == WinClassConfig::GetRefName()) return setRef(ppRef);
-			return Copyable_Impl::queryRefByCmpPtr(ppRef, id);
+			if (id == WinClassConfig::GetRefName()) return setInterface(ppRef);
+			else if (id == WinClassConfig_Impl::GetRefName()) {
+				if (ppRef != nullptr) *ppRef = this;
+				return true;
+			}
+			else return Copyable_Impl::queryRefByCmpPtr(ppRef, id);
 		}
 
 		bool queryRefByCmpStr(void **const ppRef, const char *id) {
-			if (std::strcmp(id, WinClassConfig::GetRefName()) == 0) return setRef(ppRef);
-			return Copyable_Impl::queryRefByCmpStr(ppRef, id);
+			if (std::strcmp(id, WinClassConfig::GetRefName()) == 0) return setInterface(ppRef);
+			else return Copyable_Impl::queryRefByCmpStr(ppRef, id);
 		}
 
 		bool copyByCmpPtr(void **const ppRef, const char *id) {
-			if (id == WinClassConfig::GetRefName()) return copyRef(ppRef);
-			return Copyable_Impl::copyByCmpPtr(ppRef, id);
+			if (id == WinClassConfig::GetRefName()) return copyInterface(ppRef);
+			else return Copyable_Impl::copyByCmpPtr(ppRef, id);
 		}
 
 		bool copyByCmpStr(void **const ppRef, const char *id) {
-			if (std::strcmp(id, WinClassConfig::GetRefName()) == 0) return copyRef(ppRef);
-			return Copyable_Impl::copyByCmpStr(ppRef, id);
+			if (std::strcmp(id, WinClassConfig::GetRefName()) == 0) return copyInterface(ppRef);
+			else return Copyable_Impl::copyByCmpStr(ppRef, id);
 		}
 	public:
+		static const char* GetRefName() {
+			return "WinFW::WinClassConfig_Impl";
+		}
+
 		~WinClassConfig_Impl() {
 			m_lpszMenuName->decRef();
 			m_lpszClassName->decRef();
@@ -692,7 +708,9 @@ namespace WinFW {
 		}
 
 		WinClassConfig* setStyle(WinClassStyle *&style) {
-			m_style = style->getValue();
+			WinClassStyle_Impl *buff;
+			if (!style->queryRef(reinterpret_cast<void**>(&buff), WinClassStyle_Impl::GetRefName(), true)) throw Exception::InvalidObjectException::New("WinClassStyle : incompatible");
+			m_style = buff->getValue();
 			return this;
 		}
 
@@ -738,43 +756,43 @@ namespace WinFW {
 			return this;
 		}
 
-		UINT getStyle() {
+		virtual UINT getStyle() {
 			return m_style;
 		}
 
-		int getClsExtraBytes() {
+		virtual int getClsExtraBytes() {
 			return m_cbClsExtra;
 		}
 
-		int getWndExtraBytes() {
+		virtual int getWndExtraBytes() {
 			return m_cbWndExtra;
 		}
 
-		HICON getIcon() {
+		virtual HICON getIcon() {
 			return m_hIcon;
 		}
 
-		HCURSOR getCursor() {
+		virtual HCURSOR getCursor() {
 			return m_hCursor;
 		}
 
-		HBRUSH getBackgroundColor() {
+		virtual HBRUSH getBackgroundColor() {
 			return m_hbrBackground;
 		}
 
-		HICON getIconSm() {
+		virtual HICON getIconSm() {
 			return m_hIconSm;
 		}
 
-		LPCWSTR getMenuName() {
+		virtual LPCWSTR getMenuName() {
 			return m_lpszMenuName->getWString();
 		}
 
-		WNDPROC getWndProc() {
+		virtual WNDPROC getWndProc() {
 			return m_lpfnWndProc;
 		}
 
-		LPCWSTR getClassName() {
+		virtual LPCWSTR getClassName() {
 			return m_lpszClassName->getWString();
 		}
 	};
@@ -782,7 +800,7 @@ namespace WinFW {
 	class WinClass_Impl : public virtual WinClass, public virtual Ref_Impl {
 		Text::WStringHolder *m_name;
 
-		bool setRef(void **const ppRef) {
+		bool setInterface(void **const ppRef) {
 			if (ppRef != nullptr) {
 				incRef();
 				*ppRef = static_cast<WinClass*>(this);
@@ -791,13 +809,13 @@ namespace WinFW {
 		}
 	protected:
 		bool queryRefByCmpPtr(void **const ppRef, const char *id) {
-			if (id == WinClass::GetRefName()) return setRef(ppRef);
-			return Ref_Impl::queryRefByCmpPtr(ppRef, id);
+			if (id == WinClass::GetRefName()) return setInterface(ppRef);
+			else return Ref_Impl::queryRefByCmpPtr(ppRef, id);
 		}
 
 		bool queryRefByCmpStr(void **const ppRef, const char *id) {
-			if (std::strcmp(id, WinClass::GetRefName()) == 0) return setRef(ppRef);
-			return Ref_Impl::queryRefByCmpStr(ppRef, id);
+			if (std::strcmp(id, WinClass::GetRefName()) == 0) return setInterface(ppRef);
+			else return Ref_Impl::queryRefByCmpStr(ppRef, id);
 		}
 	public:
 		~WinClass_Impl() {
@@ -820,7 +838,7 @@ namespace WinFW {
 	class WindowStyle_Impl : public virtual WindowStyle, public virtual Copyable_Impl {
 		DWORD m_style = 0;
 
-		bool setRef(void **const ppRef) {
+		bool setInterface(void **const ppRef) {
 			if (ppRef != nullptr) {
 				incRef();
 				*ppRef = static_cast<WindowStyle*>(this);
@@ -828,7 +846,7 @@ namespace WinFW {
 			return true;
 		}
 
-		bool copyRef(void **const ppRef) {
+		bool copyInterface(void **const ppRef) {
 			if (ppRef != nullptr) {
 				try {
 					*ppRef = static_cast<WindowStyle*>(new WindowStyle_Impl(m_style));
@@ -841,25 +859,33 @@ namespace WinFW {
 		}
 	protected:
 		bool queryRefByCmpPtr(void **const ppRef, const char *id) {
-			if (id == WindowStyle::GetRefName()) return setRef(ppRef);
-			return Copyable_Impl::queryRefByCmpPtr(ppRef, id);
+			if (id == WindowStyle::GetRefName()) return setInterface(ppRef);
+			else if (id == WindowStyle_Impl::GetRefName()) {
+				if (ppRef != nullptr) *ppRef = this;
+				return true;
+			}
+			else return Copyable_Impl::queryRefByCmpPtr(ppRef, id);
 		}
 
 		bool queryRefByCmpStr(void **const ppRef, const char *id) {
-			if (std::strcmp(id, WindowStyle::GetRefName()) == 0) return setRef(ppRef);
-			return Copyable_Impl::queryRefByCmpStr(ppRef, id);
+			if (std::strcmp(id, WindowStyle::GetRefName()) == 0) return setInterface(ppRef);
+			else return Copyable_Impl::queryRefByCmpStr(ppRef, id);
 		}
 
 		bool copyByCmpPtr(void **const ppRef, const char *id) {
-			if (id == WindowStyle::GetRefName()) return copyRef(ppRef);
-			return Copyable_Impl::copyByCmpPtr(ppRef, id);
+			if (id == WindowStyle::GetRefName()) return copyInterface(ppRef);
+			else return Copyable_Impl::copyByCmpPtr(ppRef, id);
 		}
 
 		bool copyByCmpStr(void **const ppRef, const char *id) {
-			if (std::strcmp(id, WindowStyle::GetRefName()) == 0) return copyRef(ppRef);
-			return Copyable_Impl::copyByCmpStr(ppRef, id);
+			if (std::strcmp(id, WindowStyle::GetRefName()) == 0) return copyInterface(ppRef);
+			else return Copyable_Impl::copyByCmpStr(ppRef, id);
 		}
 	public:
+		static const char* GetRefName() {
+			return "WinFW::WindowStyle_Impl";
+		}
+
 		WindowStyle_Impl() : WindowStyle_Impl(0) {
 		}
 
@@ -870,7 +896,7 @@ namespace WinFW {
 			return WindowStyle::GetRefName();
 		}
 
-		DWORD getValue() {
+		virtual DWORD getValue() {
 			return m_style;
 		}
 
@@ -1013,7 +1039,7 @@ namespace WinFW {
 	class WindowExStyle_Impl : public virtual WindowExStyle, public virtual Copyable_Impl {
 		DWORD m_exStyle = 0;
 
-		bool setRef(void **const ppRef) {
+		bool setInterface(void **const ppRef) {
 			if (ppRef != nullptr) {
 				incRef();
 				*ppRef = static_cast<WindowExStyle*>(this);
@@ -1021,7 +1047,7 @@ namespace WinFW {
 			return true;
 		}
 
-		bool copyRef(void **const ppRef) {
+		bool copyInterface(void **const ppRef) {
 			if (ppRef != nullptr) {
 				try {
 					*ppRef = static_cast<WindowExStyle*>(new WindowExStyle_Impl(m_exStyle));
@@ -1034,25 +1060,33 @@ namespace WinFW {
 		}
 	protected:
 		bool queryRefByCmpPtr(void **const ppRef, const char *id) {
-			if (id == WindowExStyle::GetRefName()) return setRef(ppRef);
-			return Copyable_Impl::queryRefByCmpPtr(ppRef, id);
+			if (id == WindowExStyle::GetRefName()) return setInterface(ppRef);
+			else if (id == WindowStyle_Impl::GetRefName()) {
+				if (ppRef != nullptr) *ppRef = this;
+				return true;
+			}
+			else return Copyable_Impl::queryRefByCmpPtr(ppRef, id);
 		}
 
 		bool queryRefByCmpStr(void **const ppRef, const char *id) {
-			if (std::strcmp(id, WindowExStyle::GetRefName()) == 0) return setRef(ppRef);
-			return Copyable_Impl::queryRefByCmpStr(ppRef, id);
+			if (std::strcmp(id, WindowExStyle::GetRefName()) == 0) return setInterface(ppRef);
+			else return Copyable_Impl::queryRefByCmpStr(ppRef, id);
 		}
 
 		bool copyByCmpPtr(void **const ppRef, const char *id) {
-			if (id == WindowExStyle::GetRefName()) return copyRef(ppRef);
-			return Copyable_Impl::copyByCmpPtr(ppRef, id);
+			if (id == WindowExStyle::GetRefName()) return copyInterface(ppRef);
+			else return Copyable_Impl::copyByCmpPtr(ppRef, id);
 		}
 
 		bool copyByCmpStr(void **const ppRef, const char *id) {
-			if (std::strcmp(id, WindowExStyle::GetRefName()) == 0) return copyRef(ppRef);
-			return Copyable_Impl::copyByCmpStr(ppRef, id);
+			if (std::strcmp(id, WindowExStyle::GetRefName()) == 0) return copyInterface(ppRef);
+			else return Copyable_Impl::copyByCmpStr(ppRef, id);
 		}
 	public:
+		static const char* GetRefName() {
+			return "WinFW::WindowExStyle_Impl";
+		}
+
 		WindowExStyle_Impl() : WindowExStyle_Impl(0) {
 		}
 
@@ -1063,7 +1097,7 @@ namespace WinFW {
 			return WindowExStyle::GetRefName();
 		}
 
-		DWORD getValue() {
+		virtual DWORD getValue() {
 			return m_exStyle;
 		}
 
@@ -1221,7 +1255,7 @@ namespace WinFW {
 		int m_height;
 		WinClass *m_winClass;
 
-		bool setRef(void **const ppRef) {
+		bool setInterface(void **const ppRef) {
 			if (ppRef != nullptr) {
 				incRef();
 				*ppRef = static_cast<WindowConfig*>(this);
@@ -1229,7 +1263,7 @@ namespace WinFW {
 			return true;
 		}
 
-		bool copyRef(void **const ppRef) {
+		bool copyInterface(void **const ppRef) {
 			if (ppRef != nullptr) {
 				try {
 					m_winClass->incRef();
@@ -1247,25 +1281,33 @@ namespace WinFW {
 		}
 	protected:
 		bool queryRefByCmpPtr(void **const ppRef, const char *id) {
-			if (id == WindowConfig::GetRefName()) return setRef(ppRef);
-			return Copyable_Impl::queryRefByCmpPtr(ppRef, id);
+			if (id == WindowConfig::GetRefName()) return setInterface(ppRef);
+			else if (id == WindowConfig_Impl::GetRefName()) {
+				if (ppRef != nullptr) *ppRef = this;
+				return true;
+			}
+			else return Copyable_Impl::queryRefByCmpPtr(ppRef, id);
 		}
 
 		bool queryRefByCmpStr(void **const ppRef, const char *id) {
-			if (std::strcmp(id, WindowConfig::GetRefName()) == 0) return setRef(ppRef);
-			return Copyable_Impl::queryRefByCmpStr(ppRef, id);
+			if (std::strcmp(id, WindowConfig::GetRefName()) == 0) return setInterface(ppRef);
+			else return Copyable_Impl::queryRefByCmpStr(ppRef, id);
 		}
 
 		bool copyByCmpPtr(void **const ppRef, const char *id) {
-			if (id == WindowConfig::GetRefName()) return copyRef(ppRef);
-			return Copyable_Impl::copyByCmpPtr(ppRef, id);
+			if (id == WindowConfig::GetRefName()) return copyInterface(ppRef);
+			else return Copyable_Impl::copyByCmpPtr(ppRef, id);
 		}
 
 		bool copyByCmpStr(void **const ppRef, const char *id) {
-			if (std::strcmp(id, WindowConfig::GetRefName()) == 0) return copyRef(ppRef);
-			return Copyable_Impl::copyByCmpStr(ppRef, id);
+			if (std::strcmp(id, WindowConfig::GetRefName()) == 0) return copyInterface(ppRef);
+			else return Copyable_Impl::copyByCmpStr(ppRef, id);
 		}
 	public:
+		static const char* GetRefName() {
+			return "WinFW::WindowConfig_Impl";
+		}
+
 		~WindowConfig_Impl() {
 			m_winClass->decRef();
 			m_lpWindowName->decRef();
@@ -1316,7 +1358,9 @@ namespace WinFW {
 		}
 
 		WindowConfig* setStyle(WindowStyle *&style) {
-			m_dwStyle = style->getValue();
+			WindowStyle_Impl *buff;
+			if (!style->queryRef(reinterpret_cast<void**>(&buff), WindowStyle_Impl::GetRefName(), true)) throw Exception::InvalidObjectException::New("WindowStyle : incompatible");
+			m_dwStyle = buff->getValue();
 			return this;
 		}
 
@@ -1327,7 +1371,9 @@ namespace WinFW {
 		}
 
 		WindowConfig* setExStyle(WindowExStyle *&exStyle) {
-			m_dwExStyle = exStyle->getValue();
+			WindowExStyle_Impl *buff;
+			if (!exStyle->queryRef(reinterpret_cast<void**>(&buff), WindowExStyle_Impl::GetRefName(), true)) throw Exception::InvalidObjectException::New("WindowExStyle : incompatible");
+			m_dwExStyle = buff->getValue();
 			return this;
 		}
 
@@ -1358,47 +1404,47 @@ namespace WinFW {
 			return this;
 		}
 
-		int getX() {
+		virtual int getX() {
 			return m_x;
 		}
 
-		int getY() {
+		virtual int getY() {
 			return m_y;
 		}
 
-		int getWidth() {
+		virtual int getWidth() {
 			return m_width;
 		}
 
-		int getHeight() {
+		virtual int getHeight() {
 			return m_height;
 		}
 
-		WinClass* getWinClass() {
+		virtual WinClass* getWinClass() {
 			return m_winClass;
 		}
 
-		DWORD getStyle() {
+		virtual DWORD getStyle() {
 			return m_dwStyle;
 		}
 
-		DWORD getExStyle() {
+		virtual DWORD getExStyle() {
 			return m_dwExStyle;
 		}
 
-		HWND getParent() {
+		virtual HWND getParent() {
 			return m_hWndParent;
 		}
 
-		HMENU getMenu() {
+		virtual HMENU getMenu() {
 			return m_hMenu;
 		}
 
-		LPVOID getLpParam() {
+		virtual LPVOID getLpParam() {
 			return m_lpParam;
 		}
 
-		LPCWSTR getTitle() {
+		virtual LPCWSTR getTitle() {
 			return m_lpWindowName->getWString();
 		}
 	};
@@ -1407,7 +1453,7 @@ namespace WinFW {
 		HWND m_hWnd;
 		WinClass *m_winClass;
 
-		bool setRef(void **const ppRef) {
+		bool setInterface(void **const ppRef) {
 			if (ppRef != nullptr) {
 				incRef();
 				*ppRef = static_cast<Window*>(this);
@@ -1416,13 +1462,13 @@ namespace WinFW {
 		}
 	protected:
 		bool queryRefByCmpPtr(void **const ppRef, const char *id) {
-			if (id == Window::GetRefName()) return setRef(ppRef);
-			return Ref_Impl::queryRefByCmpPtr(ppRef, id);
+			if (id == Window::GetRefName()) return setInterface(ppRef);
+			else return Ref_Impl::queryRefByCmpPtr(ppRef, id);
 		}
 
 		bool queryRefByCmpStr(void **const ppRef, const char *id) {
-			if (std::strcmp(id, Window::GetRefName()) == 0) return setRef(ppRef);
-			return Ref_Impl::queryRefByCmpStr(ppRef, id);
+			if (std::strcmp(id, Window::GetRefName()) == 0) return setInterface(ppRef);
+			else return Ref_Impl::queryRefByCmpStr(ppRef, id);
 		}
 	public:
 		~Window_Impl() {
@@ -1486,10 +1532,10 @@ namespace WinFW {
 	};
 
 	class Keyboard_Impl : public virtual Keyboard, public virtual Ref_Impl {
-		BYTE m_states[256] = { 0 };
-		bool m_lastPress[256] = { false };
+		BYTE m_states[256];
+		bool m_lastPress[256];
 
-		bool setRef(void **const ppRef) {
+		bool setInterface(void **const ppRef) {
 			if (ppRef != nullptr) {
 				incRef();
 				*ppRef = static_cast<Keyboard*>(this);
@@ -1498,15 +1544,18 @@ namespace WinFW {
 		}
 	protected:
 		bool queryRefByCmpPtr(void **const ppRef, const char *id) {
-			if (id == Keyboard::GetRefName()) return setRef(ppRef);
-			return Ref_Impl::queryRefByCmpPtr(ppRef, id);
+			if (id == Keyboard::GetRefName()) return setInterface(ppRef);
+			else return Ref_Impl::queryRefByCmpPtr(ppRef, id);
 		}
 
 		bool queryRefByCmpStr(void **const ppRef, const char *id) {
-			if (std::strcmp(id, Keyboard::GetRefName()) == 0) return setRef(ppRef);
-			return Ref_Impl::queryRefByCmpStr(ppRef, id);
+			if (std::strcmp(id, Keyboard::GetRefName()) == 0) return setInterface(ppRef);
+			else return Ref_Impl::queryRefByCmpStr(ppRef, id);
 		}
 	public:
+		Keyboard_Impl() : m_states{ 0 }, m_lastPress{ false } {
+		}
+
 		const char* getRefName() const {
 			return Keyboard::GetRefName();
 		}
@@ -1537,12 +1586,12 @@ namespace WinFW {
 	};
 
 	class Mouse_Impl : public virtual Mouse, public virtual Ref_Impl {
-		POINT m_pos = { 0 };
-		POINT m_mov = { 0 };
-		BYTE m_pData[40] = { 0 };
-		UINT m_pcbSize = sizeof(m_pData) / sizeof(BYTE);
+		POINT m_pos;
+		POINT m_mov;
+		BYTE m_pData[40];
+		UINT m_pcbSize;
 
-		bool setRef(void **const ppRef) {
+		bool setInterface(void **const ppRef) {
 			if (ppRef != nullptr) {
 				incRef();
 				*ppRef = static_cast<Mouse*>(this);
@@ -1551,15 +1600,18 @@ namespace WinFW {
 		}
 	protected:
 		bool queryRefByCmpPtr(void **const ppRef, const char *id) {
-			if (id == Mouse::GetRefName()) return setRef(ppRef);
-			return Ref_Impl::queryRefByCmpPtr(ppRef, id);
+			if (id == Mouse::GetRefName()) return setInterface(ppRef);
+			else return Ref_Impl::queryRefByCmpPtr(ppRef, id);
 		}
 
 		bool queryRefByCmpStr(void **const ppRef, const char *id) {
-			if (std::strcmp(id, Mouse::GetRefName()) == 0) return setRef(ppRef);
-			return Ref_Impl::queryRefByCmpStr(ppRef, id);
+			if (std::strcmp(id, Mouse::GetRefName()) == 0) return setInterface(ppRef);
+			else return Ref_Impl::queryRefByCmpStr(ppRef, id);
 		}
 	public:
+		Mouse_Impl() : m_pos{ 0 }, m_mov{ 0 }, m_pData{ 0 }, m_pcbSize(sizeof(m_pData) / sizeof(BYTE)) {
+		}
+
 		const char* getRefName() const {
 			return Mouse::GetRefName();
 		}
@@ -1622,9 +1674,7 @@ namespace WinFW {
 		
 		StringHolder* StringHolder::New(const char *str, size_t count) {
 			try {
-				if (str == nullptr) {
-					return new StringHolder_Impl(nullptr, 0);
-				}
+				if (str == nullptr) return new StringHolder_Impl(nullptr, 0);
 				else {
 					size_t countBuff = count + 1;
 					char *buff = new char[countBuff];
@@ -1639,9 +1689,7 @@ namespace WinFW {
 		
 		WStringHolder* WStringHolder::New(const wchar_t *str) {
 			try {
-				if (str == nullptr) {
-					return new WStringHolder_Impl(nullptr, 0);
-				}
+				if (str == nullptr) return new WStringHolder_Impl(nullptr, 0);
 				else {
 					size_t count = std::wcslen(str);
 					size_t countBuff = count + 1;
@@ -1718,21 +1766,24 @@ namespace WinFW {
 		}
 	}
 
-	WinClass* WinClass::New(WinClassConfig *&windowConfig) {
+	WinClass* WinClass::New(WinClassConfig *&winclassConfig) {
 		try {
+			WinClassConfig_Impl *buff;
+			if(!winclassConfig->queryRef(reinterpret_cast<void**>(&buff), WinClassConfig_Impl::GetRefName(), true)) throw Exception::InvalidObjectException::New("WinClassConfig : incompatible");
+
 			WNDCLASSEXW wcex;
 			wcex.cbSize = sizeof(WNDCLASSEXW);
 			wcex.hInstance = g_hInstance;
-			wcex.lpszClassName = windowConfig->getClassName();
-			wcex.lpfnWndProc = windowConfig->getWndProc();
-			wcex.cbClsExtra = windowConfig->getClsExtraBytes();
-			wcex.cbWndExtra = windowConfig->getWndExtraBytes();
-			wcex.hbrBackground = windowConfig->getBackgroundColor();
-			wcex.hCursor = windowConfig->getCursor();
-			wcex.hIcon = windowConfig->getIcon();
-			wcex.hIconSm = windowConfig->getIconSm();
-			wcex.lpszMenuName = windowConfig->getMenuName();
-			wcex.style = windowConfig->getStyle();
+			wcex.lpszClassName = buff->getClassName();
+			wcex.lpfnWndProc = buff->getWndProc();
+			wcex.cbClsExtra = buff->getClsExtraBytes();
+			wcex.cbWndExtra = buff->getWndExtraBytes();
+			wcex.hbrBackground = buff->getBackgroundColor();
+			wcex.hCursor = buff->getCursor();
+			wcex.hIcon = buff->getIcon();
+			wcex.hIconSm = buff->getIconSm();
+			wcex.lpszMenuName = buff->getMenuName();
+			wcex.style = buff->getStyle();
 			RegisterClassExW(&wcex);
 
 			Text::WStringHolder *str = Text::WStringHolder::New(wcex.lpszClassName);
@@ -1750,10 +1801,10 @@ namespace WinFW {
 		}
 	}
 
-	WinClass* WinClass::New(WinClassConfig *&&windowConfig) {
+	WinClass* WinClass::New(WinClassConfig *&&winclassConfig) {
 		try {
-			WinClass *buff = New(static_cast<WinClassConfig*&>(windowConfig));
-			windowConfig->decRef();
+			WinClass *buff = New(static_cast<WinClassConfig*&>(winclassConfig));
+			winclassConfig->decRef();
 			return buff;
 		}
 		catch (...) {
@@ -1809,7 +1860,10 @@ namespace WinFW {
 	Window* Window::New(WindowConfig *&windowConfig, bool clientSize) {
 		WinClass *winClass = nullptr;
 		try {
-			winClass = windowConfig->getWinClass();
+			WindowConfig_Impl *buff;
+			if (!windowConfig->queryRef(reinterpret_cast<void**>(&buff), WindowConfig_Impl::GetRefName(), true)) throw Exception::InvalidObjectException::New("WindowConfig : incompatible");
+
+			winClass = buff->getWinClass();
 
 			try {
 				winClass->incRef();
@@ -1820,20 +1874,20 @@ namespace WinFW {
 
 			LONG width, height;
 			if (clientSize) {
-				RECT r{ 0, 0, windowConfig->getWidth(), windowConfig->getHeight() };
-				AdjustWindowRectEx(&r, windowConfig->getStyle(), windowConfig->getMenu() == nullptr ? FALSE : TRUE, windowConfig->getExStyle());
+				RECT r{ 0, 0, buff->getWidth(), buff->getHeight() };
+				AdjustWindowRectEx(&r, buff->getStyle(), buff->getMenu() == nullptr ? FALSE : TRUE, buff->getExStyle());
 				width = r.right - r.left;
 				height = r.bottom - r.top;
 			}
 			else {
-				width = windowConfig->getWidth();
-				height = windowConfig->getHeight();
+				width = buff->getWidth();
+				height = buff->getHeight();
 			}
 
 			return new Window_Impl(CreateWindowExW(
-				windowConfig->getExStyle(), winClass->getName(), windowConfig->getTitle(), windowConfig->getStyle(),
-				windowConfig->getX(), windowConfig->getY(), width, height,
-				windowConfig->getParent(), windowConfig->getMenu(), g_hInstance, windowConfig->getLpParam()),
+				buff->getExStyle(), winClass->getName(), buff->getTitle(), buff->getStyle(),
+				buff->getX(), buff->getY(), width, height,
+				buff->getParent(), buff->getMenu(), g_hInstance, buff->getLpParam()),
 				winClass);
 		}
 		catch (...) {

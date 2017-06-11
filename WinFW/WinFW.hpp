@@ -33,7 +33,7 @@ namespace WinFW {
 		virtual unsigned long long incRef() = 0;
 		virtual unsigned long long decRef() = 0;
 		virtual bool delRef() = 0;
-		virtual bool queryRef(void**const, const char*, bool = false) = 0;
+		virtual bool queryRef(void**const, const char*, bool = true) = 0;
 		virtual const char* getRefName() = 0;
 	};
 
@@ -41,7 +41,7 @@ namespace WinFW {
 	public:
 		DLL_DECLSPEC static const char* GetRefName();
 
-		virtual bool copy(void**const, const char*, bool = false) = 0;
+		virtual bool copy(void**const, const char*, bool = true) = 0;
 	};
 
 	namespace Hidden {
@@ -282,8 +282,6 @@ namespace WinFW {
 		DLL_DECLSPEC static const char* GetRefName();
 		DLL_DECLSPEC static WinClassStyle* New();
 
-		virtual UINT getValue() = 0;
-
 		virtual WinClassStyle* clear() = 0;
 		virtual WinClassStyle* VRedraw() = 0;
 		virtual WinClassStyle* HRedraw() = 0;
@@ -315,17 +313,6 @@ namespace WinFW {
 		virtual WinClassConfig* setBackgroundColor(HBRUSH) = 0;
 		virtual WinClassConfig* setIconSm(HICON) = 0;
 		virtual WinClassConfig* setMenuName(LPCWSTR) = 0;
-
-		virtual UINT    getStyle() = 0;
-		virtual int     getClsExtraBytes() = 0;
-		virtual int     getWndExtraBytes() = 0;
-		virtual HICON   getIcon() = 0;
-		virtual HCURSOR getCursor() = 0;
-		virtual HBRUSH  getBackgroundColor() = 0;
-		virtual HICON   getIconSm() = 0;
-		virtual LPCWSTR getMenuName() = 0;
-		virtual WNDPROC getWndProc() = 0;
-		virtual LPCWSTR getClassName() = 0;
 	};
 
 	class WinClass : public virtual Ref {
@@ -341,8 +328,6 @@ namespace WinFW {
 	public:
 		DLL_DECLSPEC static const char* GetRefName();
 		DLL_DECLSPEC static WindowStyle* New();
-
-		virtual DWORD getValue() = 0;
 
 		virtual WindowStyle* clear() = 0;
 		virtual WindowStyle* Caption() = 0;
@@ -377,8 +362,6 @@ namespace WinFW {
 	public:
 		DLL_DECLSPEC static const char* GetRefName();
 		DLL_DECLSPEC static WindowExStyle* New();
-
-		virtual DWORD getValue() = 0;
 
 		virtual WindowExStyle* clear() = 0;
 		virtual WindowExStyle* AcceptFiles() = 0;
@@ -430,18 +413,6 @@ namespace WinFW {
 		virtual WindowConfig* setMenu(HMENU) = 0;
 		virtual WindowConfig* setLpParam(LPVOID) = 0;
 		virtual WindowConfig* setTitle(LPCWSTR) = 0;
-
-		virtual int       getX() = 0;
-		virtual int       getY() = 0;
-		virtual int       getWidth() = 0;
-		virtual int       getHeight() = 0;
-		virtual WinClass* getWinClass() = 0;
-		virtual DWORD     getStyle() = 0;
-		virtual DWORD     getExStyle() = 0;
-		virtual HWND      getParent() = 0;
-		virtual HMENU     getMenu() = 0;
-		virtual LPVOID    getLpParam() = 0;
-		virtual LPCWSTR   getTitle() = 0;
 	};
 
 	class Window : public virtual Ref {
