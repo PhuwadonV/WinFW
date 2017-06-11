@@ -626,28 +626,14 @@ namespace WinFW {
 		bool copyRef(void **const ppRef) {
 			if (ppRef != nullptr) {
 				try {
-					Text::WStringHolder *lpszMenuName = Text::WStringHolder::New(m_lpszMenuName->getWString());
-					Text::WStringHolder *lpszClassName;
-
-					try {
-						lpszClassName = Text::WStringHolder::New(m_lpszClassName->getWString());
-					}
-					catch (...) {
-						lpszMenuName->decRef();
-						return false;
-					}
-
-					try {
-						*ppRef = static_cast<WinClassConfig*>(new WinClassConfig_Impl(m_style, m_cbClsExtra, m_cbWndExtra, m_hIcon, m_hCursor,
-							m_hbrBackground, m_hIconSm, lpszMenuName, lpszClassName, m_lpfnWndProc));
-					}
-					catch (...) {
-						lpszMenuName->decRef();
-						lpszClassName->decRef();
-						return false;
-					}
+					m_lpszClassName->incRef();
+					m_lpszMenuName->incRef();
+					*ppRef = static_cast<WinClassConfig*>(new WinClassConfig_Impl(m_style, m_cbClsExtra, m_cbWndExtra, m_hIcon, m_hCursor,
+						m_hbrBackground, m_hIconSm, m_lpszMenuName, m_lpszClassName, m_lpfnWndProc));
 				}
 				catch (...) {
+					m_lpszClassName->decRef();
+					m_lpszMenuName->decRef();
 					return false;
 				}
 			}
@@ -1246,19 +1232,14 @@ namespace WinFW {
 		bool copyRef(void **const ppRef) {
 			if (ppRef != nullptr) {
 				try {
-					Text::WStringHolder *lpWindowName = Text::WStringHolder::New(m_lpWindowName->getWString());
 					m_winClass->incRef();
-					try {
-						*ppRef = static_cast<WindowConfig*>(new WindowConfig_Impl(m_dwExStyle, lpWindowName, m_dwStyle, m_x, m_y, m_hWndParent,
-							m_hMenu, m_lpParam, m_width, m_height, m_winClass));
-					}
-					catch (...) {
-						lpWindowName->decRef();
-						m_winClass->decRef();
-						return false;
-					}
+					m_lpWindowName->incRef();
+					*ppRef = static_cast<WindowConfig*>(new WindowConfig_Impl(m_dwExStyle, m_lpWindowName, m_dwStyle, m_x, m_y, m_hWndParent,
+						m_hMenu, m_lpParam, m_width, m_height, m_winClass));
 				}
 				catch (...) {
+					m_lpWindowName->decRef();
+					m_winClass->decRef();
 					return false;
 				}
 			}
