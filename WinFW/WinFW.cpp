@@ -172,7 +172,7 @@ namespace WinFW {
 		}
 
 		virtual bool queryRefByCmpStr(void **const ppRef, const char *id) {
-			if (!strcmp(id, Ref::GetRefName())) return setRef(ppRef);
+			if (strcmp(id, Ref::GetRefName()) == 0) return setRef(ppRef);
 			return false;
 		}
 	public:
@@ -228,7 +228,7 @@ namespace WinFW {
 		}
 
 		bool queryRefByCmpStr(void **const ppRef, const char *id) {
-			if (!strcmp(id, Copyable::GetRefName())) return setRef(ppRef);
+			if (strcmp(id, Copyable::GetRefName()) == 0) return setRef(ppRef);
 			return Ref_Impl::queryRefByCmpStr(ppRef, id);
 		}
 
@@ -297,7 +297,7 @@ namespace WinFW {
 			}
 
 			bool queryRefByCmpStr(void **const ppRef, const char *id) {
-				if (!strcmp(id, StringHolder::GetRefName())) return setRef(ppRef);
+				if (strcmp(id, StringHolder::GetRefName()) == 0) return setRef(ppRef);
 				return Copyable_Impl::queryRefByCmpStr(ppRef, id);
 			}
 
@@ -307,7 +307,7 @@ namespace WinFW {
 			}
 
 			bool copyByCmpStr(void **const ppRef, const char *id) {
-				if (!strcmp(id, StringHolder::GetRefName())) return copyRef(ppRef);
+				if (strcmp(id, StringHolder::GetRefName()) == 0) return copyRef(ppRef);
 				return Copyable_Impl::copyByCmpStr(ppRef, id);
 			}
 		public:
@@ -371,7 +371,7 @@ namespace WinFW {
 			}
 
 			bool queryRefByCmpStr(void **const ppRef, const char *id) {
-				if (!strcmp(id, WStringHolder::GetRefName())) return setRef(ppRef);
+				if (strcmp(id, WStringHolder::GetRefName()) == 0) return setRef(ppRef);
 				return Copyable_Impl::queryRefByCmpStr(ppRef, id);
 			}
 
@@ -381,7 +381,7 @@ namespace WinFW {
 			}
 
 			bool copyByCmpStr(void **const ppRef, const char *id) {
-				if (!strcmp(id, WStringHolder::GetRefName())) return copyRef(ppRef);
+				if (strcmp(id, WStringHolder::GetRefName()) == 0) return copyRef(ppRef);
 				return Copyable_Impl::copyByCmpStr(ppRef, id);
 			}
 		public:
@@ -424,7 +424,7 @@ namespace WinFW {
 			}
 
 			bool queryRefByCmpStr(void **const ppRef, const char *id) {
-				if (!strcmp(id, Exception::GetRefName())) return setRef(ppRef);
+				if (strcmp(id, Exception::GetRefName()) == 0) return setRef(ppRef);
 				return Ref_Impl::queryRefByCmpStr(ppRef, id);
 			}
 		public:
@@ -463,7 +463,7 @@ namespace WinFW {
 			}
 
 			bool queryRefByCmpStr(void **const ppRef, const char *id) {
-				if (!strcmp(id, InvalidObjectException::GetRefName())) return setRef(ppRef);
+				if (strcmp(id, InvalidObjectException::GetRefName()) == 0) return setRef(ppRef);
 				return Exception_Impl::queryRefByCmpStr(ppRef, id);
 			}
 		public:
@@ -509,7 +509,7 @@ namespace WinFW {
 		}
 
 		bool queryRefByCmpStr(void **const ppRef, const char *id) {
-			if (!strcmp(id, WinClassStyle::GetRefName())) return setRef(ppRef);
+			if (strcmp(id, WinClassStyle::GetRefName()) == 0) return setRef(ppRef);
 			return Copyable_Impl::queryRefByCmpStr(ppRef, id);
 		}
 
@@ -519,7 +519,7 @@ namespace WinFW {
 		}
 
 		bool copyByCmpStr(void **const ppRef, const char *id) {
-			if (!strcmp(id, WinClassStyle::GetRefName())) return copyRef(ppRef);
+			if (strcmp(id, WinClassStyle::GetRefName()) == 0) return copyRef(ppRef);
 			return Copyable_Impl::copyByCmpStr(ppRef, id);
 		}
 	public:
@@ -646,7 +646,7 @@ namespace WinFW {
 		}
 
 		bool queryRefByCmpStr(void **const ppRef, const char *id) {
-			if (!strcmp(id, WinClassConfig::GetRefName())) return setRef(ppRef);
+			if (strcmp(id, WinClassConfig::GetRefName()) == 0) return setRef(ppRef);
 			return Copyable_Impl::queryRefByCmpStr(ppRef, id);
 		}
 
@@ -656,7 +656,7 @@ namespace WinFW {
 		}
 
 		bool copyByCmpStr(void **const ppRef, const char *id) {
-			if (!strcmp(id, WinClassConfig::GetRefName())) return copyRef(ppRef);
+			if (strcmp(id, WinClassConfig::GetRefName()) == 0) return copyRef(ppRef);
 			return Copyable_Impl::copyByCmpStr(ppRef, id);
 		}
 	public:
@@ -796,7 +796,7 @@ namespace WinFW {
 		}
 
 		bool queryRefByCmpStr(void **const ppRef, const char *id) {
-			if (!strcmp(id, WinClass::GetRefName())) return setRef(ppRef);
+			if (strcmp(id, WinClass::GetRefName()) == 0) return setRef(ppRef);
 			return Ref_Impl::queryRefByCmpStr(ppRef, id);
 		}
 	public:
@@ -846,7 +846,7 @@ namespace WinFW {
 		}
 
 		bool queryRefByCmpStr(void **const ppRef, const char *id) {
-			if (!strcmp(id, WindowStyle::GetRefName())) return setRef(ppRef);
+			if (strcmp(id, WindowStyle::GetRefName()) == 0) return setRef(ppRef);
 			return Copyable_Impl::queryRefByCmpStr(ppRef, id);
 		}
 
@@ -856,7 +856,7 @@ namespace WinFW {
 		}
 
 		bool copyByCmpStr(void **const ppRef, const char *id) {
-			if (!strcmp(id, WindowStyle::GetRefName())) return copyRef(ppRef);
+			if (strcmp(id, WindowStyle::GetRefName()) == 0) return copyRef(ppRef);
 			return Copyable_Impl::copyByCmpStr(ppRef, id);
 		}
 	public:
@@ -1039,7 +1039,7 @@ namespace WinFW {
 		}
 
 		bool queryRefByCmpStr(void **const ppRef, const char *id) {
-			if (!strcmp(id, WindowExStyle::GetRefName())) return setRef(ppRef);
+			if (strcmp(id, WindowExStyle::GetRefName()) == 0) return setRef(ppRef);
 			return Copyable_Impl::queryRefByCmpStr(ppRef, id);
 		}
 
@@ -1049,7 +1049,7 @@ namespace WinFW {
 		}
 
 		bool copyByCmpStr(void **const ppRef, const char *id) {
-			if (!strcmp(id, WindowExStyle::GetRefName())) return copyRef(ppRef);
+			if (strcmp(id, WindowExStyle::GetRefName()) == 0) return copyRef(ppRef);
 			return Copyable_Impl::copyByCmpStr(ppRef, id);
 		}
 	public:
@@ -1252,7 +1252,7 @@ namespace WinFW {
 		}
 
 		bool queryRefByCmpStr(void **const ppRef, const char *id) {
-			if (!strcmp(id, WindowConfig::GetRefName())) return setRef(ppRef);
+			if (strcmp(id, WindowConfig::GetRefName()) == 0) return setRef(ppRef);
 			return Copyable_Impl::queryRefByCmpStr(ppRef, id);
 		}
 
@@ -1262,7 +1262,7 @@ namespace WinFW {
 		}
 
 		bool copyByCmpStr(void **const ppRef, const char *id) {
-			if (!strcmp(id, WindowConfig::GetRefName())) return copyRef(ppRef);
+			if (strcmp(id, WindowConfig::GetRefName()) == 0) return copyRef(ppRef);
 			return Copyable_Impl::copyByCmpStr(ppRef, id);
 		}
 	public:
@@ -1421,7 +1421,7 @@ namespace WinFW {
 		}
 
 		bool queryRefByCmpStr(void **const ppRef, const char *id) {
-			if (!strcmp(id, Window::GetRefName())) return setRef(ppRef);
+			if (strcmp(id, Window::GetRefName()) == 0) return setRef(ppRef);
 			return Ref_Impl::queryRefByCmpStr(ppRef, id);
 		}
 	public:
@@ -1503,7 +1503,7 @@ namespace WinFW {
 		}
 
 		bool queryRefByCmpStr(void **const ppRef, const char *id) {
-			if (!strcmp(id, Keyboard::GetRefName())) return setRef(ppRef);
+			if (strcmp(id, Keyboard::GetRefName()) == 0) return setRef(ppRef);
 			return Ref_Impl::queryRefByCmpStr(ppRef, id);
 		}
 	public:
@@ -1556,7 +1556,7 @@ namespace WinFW {
 		}
 
 		bool queryRefByCmpStr(void **const ppRef, const char *id) {
-			if (!strcmp(id, Mouse::GetRefName())) return setRef(ppRef);
+			if (strcmp(id, Mouse::GetRefName()) == 0) return setRef(ppRef);
 			return Ref_Impl::queryRefByCmpStr(ppRef, id);
 		}
 	public:
