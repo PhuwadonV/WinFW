@@ -1796,7 +1796,7 @@ namespace WinFW {
 				return nullptr;
 			}
 		}
-		catch (Exception::InvalidObjectException *e) {
+		catch (Exception::Exception *e) {
 			throw e;
 		}
 		catch (...) {
@@ -1893,7 +1893,7 @@ namespace WinFW {
 				buff->getParent(), buff->getMenu(), g_hInstance, buff->getLpParam()),
 				winClass);
 		}
-		catch (Exception::InvalidObjectException *e) {
+		catch (Exception::Exception *e) {
 			throw e;
 		}
 		catch (...) {
