@@ -33,7 +33,7 @@ namespace WinFW {
 		virtual unsigned long long incRef() = 0;
 		virtual unsigned long long decRef() = 0;
 		virtual bool delRef() = 0;
-		virtual bool queryRef(void**const, const char*, bool = true) = 0;
+		virtual bool queryRef(void**const, const char*, bool = false) = 0;
 		virtual const char* getRefName() = 0;
 	};
 
@@ -41,7 +41,7 @@ namespace WinFW {
 	public:
 		DLL_DECLSPEC static const char* GetRefName();
 
-		virtual bool copy(void**const, const char*, bool = true) = 0;
+		virtual bool copy(void**const, const char*, bool = false) = 0;
 	};
 
 	namespace Hidden {

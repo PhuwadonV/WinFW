@@ -203,9 +203,9 @@ namespace WinFW {
 			return true;
 		}
 
-		bool queryRef(void **const ppRef, const char *id, bool b) {
-			if (b) return queryRefByCmpPtr(ppRef, id);
-			else return queryRefByCmpStr(ppRef, id);
+		bool queryRef(void **const ppRef, const char *id, bool cmpByStr) {
+			if (cmpByStr) return queryRefByCmpStr(ppRef, id);
+			else return queryRefByCmpPtr(ppRef, id);
 		}
 
 		const char* getRefName() {
@@ -250,9 +250,9 @@ namespace WinFW {
 			return Copyable::GetRefName();
 		}
 
-		bool copy(void **const ppRef, const char *id, bool b) {
-			if (b) return copyByCmpPtr(ppRef, id);
-			else return copyByCmpStr(ppRef, id);
+		bool copy(void **const ppRef, const char *id, bool cmpByStr) {
+			if (cmpByStr) return copyByCmpStr(ppRef, id);
+			else return copyByCmpPtr(ppRef, id);
 		}
 	};
 
@@ -505,10 +505,6 @@ namespace WinFW {
 	protected:
 		bool queryRefByCmpPtr(void **const ppRef, const char *id) {
 			if (id == WinClassStyle::GetRefName()) return setInterface(ppRef);
-			else if (id == WinClassStyle_Impl::GetRefName()) {
-				if (ppRef != nullptr) *ppRef = this;
-				return true;
-			}
 			else return Copyable_Impl::queryRefByCmpPtr(ppRef, id);
 		}
 
@@ -860,10 +856,6 @@ namespace WinFW {
 	protected:
 		bool queryRefByCmpPtr(void **const ppRef, const char *id) {
 			if (id == WindowStyle::GetRefName()) return setInterface(ppRef);
-			else if (id == WindowStyle_Impl::GetRefName()) {
-				if (ppRef != nullptr) *ppRef = this;
-				return true;
-			}
 			else return Copyable_Impl::queryRefByCmpPtr(ppRef, id);
 		}
 
@@ -1061,10 +1053,6 @@ namespace WinFW {
 	protected:
 		bool queryRefByCmpPtr(void **const ppRef, const char *id) {
 			if (id == WindowExStyle::GetRefName()) return setInterface(ppRef);
-			else if (id == WindowStyle_Impl::GetRefName()) {
-				if (ppRef != nullptr) *ppRef = this;
-				return true;
-			}
 			else return Copyable_Impl::queryRefByCmpPtr(ppRef, id);
 		}
 
@@ -1769,7 +1757,7 @@ namespace WinFW {
 	WinClass* WinClass::New(WinClassConfig *&winclassConfig) {
 		try {
 			WinClassConfig_Impl *buff;
-			if(!winclassConfig->queryRef(reinterpret_cast<void**>(&buff), WinClassConfig_Impl::GetRefName(), true)) throw Exception::InvalidObjectException::New("WinClassConfig : incompatible");
+			if(!winclassConfig->queryRef(reinterpret_cast<void**>(&buff), WinClassConfig_Impl::GetRefName(), false)) throw Exception::InvalidObjectException::New("WinClassConfig : incompatible");
 
 			WNDCLASSEXW wcex;
 			wcex.cbSize = sizeof(WNDCLASSEXW);
@@ -1864,7 +1852,7 @@ namespace WinFW {
 		WinClass *winClass = nullptr;
 		try {
 			WindowConfig_Impl *buff;
-			if (!windowConfig->queryRef(reinterpret_cast<void**>(&buff), WindowConfig_Impl::GetRefName(), true)) throw Exception::InvalidObjectException::New("WindowConfig : incompatible");
+			if (!windowConfig->queryRef(reinterpret_cast<void**>(&buff), WindowConfig_Impl::GetRefName(), false)) throw Exception::InvalidObjectException::New("WindowConfig : incompatible");
 
 			winClass = buff->getWinClass();
 
