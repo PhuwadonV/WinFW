@@ -117,6 +117,7 @@ namespace WinFW {
 
 			template<typename Interface>
 			class Copyable : public Ref<Interface> {
+				using Base = Ref<Interface>;
 			public:
 				inline Copyable(Interface *ptr) : Ref<Interface>(ptr) {
 				}
@@ -127,7 +128,7 @@ namespace WinFW {
 						(*target)->decRef();
 						*target = nullptr;
 					}
-					return m_ptr->copy(reinterpret_cast<void**>(target), TargetType::GetRefName(), cmpByStr);
+					return Base::m_ptr->copy(reinterpret_cast<void**>(target), TargetType::GetRefName(), cmpByStr);
 				}
 			};
 		}
@@ -139,25 +140,25 @@ namespace WinFW {
 		using Base = typename Hidden::If<std::is_base_of<WinFW::Copyable, Interface>::value, Hidden::IPtr::Copyable<Interface>, typename std::enable_if<std::is_base_of<WinFW::Ref, Interface>::value, Hidden::IPtr::Ref<Interface>>::type>::Eval;
 
 		inline IPtr& copyPtr(Interface *ptr) {
-			decRef();
-			m_ptr = ptr;
-			incRef();
+			Base::decRef();
+			Base::m_ptr = ptr;
+			Base::incRef();
 			return *this;
 		}
 
 		inline IPtr& movePtr(Interface *&&ptr) {
-			decRef();
-			m_ptr = ptr;
+			Base::decRef();
+			Base::m_ptr = ptr;
 			ptr = nullptr;
 			return *this;
 		}
 	public:
-		inline ~IPtr() { decRef(); }
+		inline ~IPtr() { Base::decRef(); }
 		inline IPtr() : Base(nullptr) {}
 		inline IPtr(decltype(nullptr)) : Base(nullptr) {}
 
 		template<typename SomeInterface>
-		inline IPtr(SomeInterface *const &rhs) : Base(static_cast<Interface*>(rhs)) { incRef(); }
+		inline IPtr(SomeInterface *const &rhs) : Base(static_cast<Interface*>(rhs)) { Base::incRef(); }
 
 		template<typename SomeInterface>
 		inline IPtr(SomeInterface *&&rhs) : Base(static_cast<Interface*>(rhs)) { rhs = nullptr; }
@@ -173,7 +174,7 @@ namespace WinFW {
 		inline IPtr(IPtr<SomeInterface> &&rhs) : IPtr(static_cast<Interface*&&>(rhs.m_ptr)) {}
 
 		inline IPtr& operator=(decltype(__nullptr)) {
-			decRef();
+			Base::decRef();
 			return *this;
 		}
 
@@ -207,30 +208,30 @@ namespace WinFW {
 
 		template<typename SomeInterface>
 		inline bool operator==(SomeInterface *ptr) {
-			return m_ptr == ptr;
+			return Base::m_ptr == ptr;
 		}
 
 		template<typename SomeInterface>
 		inline bool operator!=(SomeInterface *ptr) {
-			return m_ptr == ptr;
+			return Base::m_ptr == ptr;
 		}
 
 		inline bool operator==(const IPtr& rhs) {
-			return m_ptr == rhs.m_ptr;
+			return Base::m_ptr == rhs.m_ptr;
 		}
 
 		template<typename SomeInterface>
 		inline bool operator==(const IPtr<SomeInterface> &rhs) {
-			return m_ptr == rhs.m_ptr;
+			return Base::m_ptr == rhs.m_ptr;
 		}
 
 		inline bool operator!=(const IPtr& rhs) {
-			return m_ptr != rhs.m_ptr;
+			return Base::m_ptr != rhs.m_ptr;
 		}
 
 		template<typename SomeInterface>
 		inline bool operator!=(const IPtr<SomeInterface> &rhs) {
-			return m_ptr != rhs.m_ptr;
+			return Base::m_ptr != rhs.m_ptr;
 		}
 	};
 
