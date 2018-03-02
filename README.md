@@ -32,7 +32,12 @@ Automatic create Library folder and copy files from project folder
 
 #pragma comment(lib, "WinFW.lib")
 
-using namespace WinFW;
+using WinFW::EventLoop;
+using WinFW::IPtr;
+using WinFW::Window;
+using WinFW::WindowConfig;
+using WinFW::WinClass;
+using WinFW::WinClassConfig;
 
 IPtr<Window> window;
 
@@ -40,7 +45,7 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 constexpr int width = 800;
 constexpr int height = 600;
-constexpr wchar_t *title = L"Test";
+constexpr wchar_t const*title = L"Test";
 
 int main(HINSTANCE hInstance, char *lpCmdLine, int nCmdShow) {
 	window = Window::New(WindowConfig::New(WinClass::New(WinClassConfig::New(L"Class1", WndProc)), width, height));
@@ -53,6 +58,7 @@ int main(HINSTANCE hInstance, char *lpCmdLine, int nCmdShow) {
 
 		}
 	}
+
 	return 0;
 }
 
