@@ -45,12 +45,25 @@ namespace WinFW {
 	};
 
 	namespace Hidden {
+		template<typename Type>
+		class Evalable {
+		public:
+			using Eval = Type;
+		};
+
+		template<bool, typename True, typename>
+		class If : public Evalable<True> {};
+
+		template<typename False>
+		class If<false, typename, False> : public Evalable<False> {};
+		  
 		namespace IPtr {
 			template<typename Interface>
 			class Ref {
 			protected:
 				Interface *m_ptr;
 
+			public:
 				inline unsigned long long incRef() {
 					if (isActive()) return m_ptr->incRef();
 					return 0;
@@ -68,7 +81,7 @@ namespace WinFW {
 				inline void set(Interface *ptr) {
 					m_ptr = ptr;
 				}
-			public:
+
 				inline Ref(Interface *ptr) : m_ptr(ptr) {
 				}
 
@@ -102,15 +115,8 @@ namespace WinFW {
 				}
 			};
 
-			template<typename Interface, bool>
-			class Copyable : public Ref<Interface> {
-			public:
-				inline Copyable(Interface *ptr) : Ref<Interface>(ptr) {
-				}
-			};
-
 			template<typename Interface>
-			class Copyable<Interface, true> : public Ref<Interface> {
+			class Copyable : public Ref<Interface> {
 			public:
 				inline Copyable(Interface *ptr) : Ref<Interface>(ptr) {
 				}
@@ -128,9 +134,9 @@ namespace WinFW {
 	}
 
 	template<typename Interface>
-	class IPtr : public Hidden::IPtr::Copyable<Interface, std::is_base_of<WinFW::Copyable, Interface>::value> {
+	class IPtr : public Hidden::If<std::is_base_of<WinFW::Copyable, Interface>::value, Hidden::IPtr::Copyable<Interface>, typename std::enable_if<std::is_base_of<WinFW::Ref, Interface>::value, Hidden::IPtr::Ref<Interface>>::type>::Eval {
 		template<typename> friend class IPtr;
-		using Base = Hidden::IPtr::Copyable<Interface, std::is_base_of<WinFW::Copyable, Interface>::value>;
+		using Base = typename Hidden::If<std::is_base_of<WinFW::Copyable, Interface>::value, Hidden::IPtr::Copyable<Interface>, typename std::enable_if<std::is_base_of<WinFW::Ref, Interface>::value, Hidden::IPtr::Ref<Interface>>::type>::Eval;
 
 		inline IPtr& copyPtr(Interface *ptr) {
 			decRef();
